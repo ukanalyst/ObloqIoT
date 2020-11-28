@@ -4,7 +4,7 @@ namespace Obloq {
 
     //%
     void obloqSetTxBufferSize(int size){
-        if(size > 100) {
+        if(size > 500) {
             size = 500;
         }
         uBit.serial.setTxBufferSize(size);
@@ -12,7 +12,7 @@ namespace Obloq {
 
     //%
     void obloqSetRxBufferSize(int size){
-        if(size > 100) {
+        if(size > 500) {
             size = 500;
         }
         uBit.serial.setRxBufferSize(size);
@@ -46,12 +46,11 @@ namespace Obloq {
       }
     }
 
-     //%
+    //%
     void obloqWriteString(StringData *text) {
       if (!text) {
           return;
       }
       uBit.serial.send(ManagedString(text));
     }
-
 }
