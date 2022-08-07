@@ -419,7 +419,17 @@ namespace Obloq {
         Obloq_serial_init()
         Obloq_start_connect_http()
     }
-    
+
+    /**
+     * Disconnect from WiFi
+    */
+    //% weight=210 group="01_System" 
+    //% blockId=Obloq_WIFI_disconnect
+    //% block="Wifi Disconnect"
+    //% advanced=false
+    export function WIFI_disconnect(): void {
+        Obloq_disconnect_wifi()
+    }
     
      /**
      * @param BROKER to BROKER ,eg: "iot.dfrobot.com"
@@ -446,7 +456,17 @@ namespace Obloq {
         Obloq_start_connect_mqtt("connect wifi")
     }
     
- 
+    /**
+     * Disconnect from MQTT
+    */
+    //% weight=199 group="02_MQTT" 
+    //% blockId=Obloq_mqtt_disconnect
+    //% block="MQTT Disconnect"
+    //% advanced=false
+    export function Obloq_mqtt_disconnect(): void {
+        Obloq_disconnect_mqtt()
+    }
+    
     /**
      * The IFTTT post request.url(string): URL; content(string):content
      * time(ms): private long maxWait
@@ -854,6 +874,42 @@ namespace Obloq {
          }	   
     }
 
+    function Obloq_disconnect_mqtt(): boolean {
+        while (OBLOQ_WORKING_MODE_IS_STOP) { basic.pause(20) }
+        let time = 5000
+        if (time < 100) {
+            time = 100
+        }
+        let timeout = time / 100
+        let _timeout = 0
+        if (!OBLOQ_SERIAL_INIT) {
+            Obloq_serial_init()
+        }
+        obloqWriteString("|4|1|4|\r")
+
+        while (OBLOQ_BOOL_TYPE_IS_TRUE) {
+            if (OBLOQ_ANSWER_CMD == "MqttDisconnected") {
+                OBLOQ_ANSWER_CMD = OBLOQ_STR_TYPE_IS_NONE
+                // Obloq_mark_reset("mqtt")
+                return OBLOQ_BOOL_TYPE_IS_TRUE
+            } else if (OBLOQ_ANSWER_CMD == "timeout") {
+                OBLOQ_ANSWER_CMD = OBLOQ_STR_TYPE_IS_NONE
+                return OBLOQ_BOOL_TYPE_IS_FALSE
+            }
+            basic.pause(100)
+            _timeout += 1
+            if (_timeout > timeout) {
+                if (OBLOQ_ANSWER_CMD != "MqttDisconnected") {
+                    OBLOQ_ANSWER_CMD = OBLOQ_STR_TYPE_IS_NONE
+                    return OBLOQ_BOOL_TYPE_IS_FALSE
+                }
+                else {
+                    return OBLOQ_BOOL_TYPE_IS_TRUE
+                }
+            }
+        }
+        return OBLOQ_BOOL_TYPE_IS_FALSE
+    }
 
     function Obloq_connect_iot(): number {
         OBLOQ_MQTT_ICON = 1
