@@ -612,7 +612,8 @@ namespace Obloq {
             Obloq_serial_init()
         }
         obloqWriteString("|2|2|\r")
-
+        OBLOQ_WORKING_MODE_IS_HTTP = OBLOQ_BOOL_TYPE_IS_FALSE
+        
         while (OBLOQ_BOOL_TYPE_IS_TRUE) {
             if (OBLOQ_ANSWER_CMD == "WifiDisconnect") {
                 OBLOQ_ANSWER_CMD = OBLOQ_STR_TYPE_IS_NONE
