@@ -363,8 +363,10 @@ namespace Obloq {
     
     
     basic.forever(() => {
-        if (OBLOQ_DEBUG) { led.plot(0, 0) }
-        basic.pause(150)
+        if (OBLOQ_DEBUG) {
+            led.plot(0, 0)
+            basic.pause(150)
+        }
         if ((OBLOQ_WRONG_TYPE == "wifi disconnect") ||
             (OBLOQ_WRONG_TYPE == "wifi connect timeout") ||
             (OBLOQ_WRONG_TYPE == "wifi connect failure") ||
@@ -374,8 +376,8 @@ namespace Obloq {
             (OBLOQ_WRONG_TYPE == "mqtt connect timeout") ||
             (OBLOQ_WRONG_TYPE == "mqtt connect failure")) {
             OBLOQ_WORKING_MODE_IS_STOP = OBLOQ_BOOL_TYPE_IS_TRUE
-            let type = "wifi"//OBLOQ_WRONG_TYPE.substr(0,4)
-            Obloq_mark_reset(type)
+            // let type = "wifi"//OBLOQ_WRONG_TYPE.substr(0,4)
+            // Obloq_mark_reset(type)
             if (OBLOQ_DEBUG) { basic.showString(OBLOQ_WRONG_TYPE) }
             if (OBLOQ_WORKING_MODE_IS_MQTT) {
                 if (OBLOQ_MQTT_INIT) {
@@ -392,8 +394,10 @@ namespace Obloq {
             }
 
         }
-        if (OBLOQ_DEBUG) { led.unplot(0, 0) }
-        basic.pause(150)
+        if (OBLOQ_DEBUG) {
+            led.unplot(0, 0)
+            basic.pause(150)
+        }
     })
 
     
@@ -613,7 +617,7 @@ namespace Obloq {
         }
         obloqWriteString("|2|2|\r")
         OBLOQ_WORKING_MODE_IS_HTTP = OBLOQ_BOOL_TYPE_IS_FALSE
-        
+
         while (OBLOQ_BOOL_TYPE_IS_TRUE) {
             if (OBLOQ_ANSWER_CMD == "WifiDisconnect") {
                 OBLOQ_ANSWER_CMD = OBLOQ_STR_TYPE_IS_NONE
@@ -887,6 +891,7 @@ namespace Obloq {
             Obloq_serial_init()
         }
         obloqWriteString("|4|1|4|\r")
+        OBLOQ_WORKING_MODE_IS_MQTT = OBLOQ_BOOL_TYPE_IS_FALSE
 
         while (OBLOQ_BOOL_TYPE_IS_TRUE) {
             if (OBLOQ_ANSWER_CMD == "MqttDisconnected") {
